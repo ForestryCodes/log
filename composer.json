@@ -1,0 +1,25 @@
+{
+    "name": "teacup/log",
+	"type": "library",
+    "description": "Small log file writer with adjustable log level settings.",
+    "keywords": ["log", "logging"],
+	"version": "0.1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Melzer",
+            "email": "daniel@melzer.ws",
+            "homepage": "http://daniel.melzer.ws",
+            "role": "Developer"
+        }
+    ],
+	"support": {
+		"issues": "https://github.com/daniel-melzer/Teacup/issues"
+	},
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "classmap": ["Log.php"]
+    }
+}
