@@ -1,4 +1,4 @@
-# Teacup Log Component
+# Teacup Log Component [![Build Status](https://travis-ci.org/daniel-melzer/teacup-json.png?branch=master)](https://travis-ci.org/daniel-melzer/teacup-log)
 
 Small log file writer with adjustable log level settings.
 
