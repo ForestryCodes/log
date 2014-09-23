@@ -58,10 +58,16 @@ This method accepts any string which is compatible with PHPs native `date()`.
 The default format for the log message is `date level message`. To change it, you can re-arrange the placeholders with `setLogFormat`:
 
 ```php
-$logger->setLogFormat('[%2$s|%1$s] %3$s'); //[INFO|2013-04-25 13:37:42] This is an info message
+$logger->setLogFormat('[{level}|{date}] {message}'); //[INFO|2013-04-25 13:37:42] This is an info message
 ```
 
 There are the following placeholder available:
+
+* {date}
+* {level}
+* {message}
+
+These placeholders will be replaced with ones for `sprintf()`, so you can also use the following:
 
 * `%1$s` = date
 * `%2$s` = level

@@ -227,17 +227,21 @@ class Log {
 	 * Sets the log string format.
 	 *
 	 * String will be parsed with sprintf(). Following placeholder are defined:
-	 * - %1$s = date
-	 * - %2$s = level
-	 * - %3$s = message
+	 * - {date}
+	 * - {level}
+	 * - {message}
 	 *
 	 * Example:
-	 * $format = '[%2$s|%1$s] %3$s'; //[INFO|2013-04-25 13:37:42] This is an information message
+	 * $format = '[{level}|{date}] {message}'; //[INFO|2013-04-25 13:37:42] This is an information message
 	 *
 	 * @param $format
 	 */
 	public function setLogFormat($format) {
-		$this->logFormat = $format;
+		$this->logFormat = str_replace(
+				array('{date}', '{level}', '{message}'),
+				array('%1$s', '%2$s', '%3$s'),
+				$format
+		);
 	}
 
 	/**

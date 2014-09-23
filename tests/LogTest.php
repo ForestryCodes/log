@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../Log.php';
 
 
 class Log extends PHPUnit_Framework_TestCase {
@@ -188,7 +187,7 @@ class Log extends PHPUnit_Framework_TestCase {
 
 	public function testSetLogFormat() {
 		$log = new Teacup\Log('/tmp', 'test.log');
-		$log->setLogFormat('[%1$s|%2$s] %3$s');
+		$log->setLogFormat('[{date}|{level}] {message}');
 		$log->debug('Setted another log format');
 
 		$content = file_get_contents('/tmp/test.log');
