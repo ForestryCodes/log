@@ -256,6 +256,15 @@ class Log {
 	}
 
 	/**
+	 * Gets the current level of the log instance
+	 *
+	 * @return int
+	 */
+	public function getLevel() {
+		return (int)$this->level;
+	}
+
+	/**
 	 * Replaces placeholders in the message with the values from the context array.
 	 *
 	 * @param string $message

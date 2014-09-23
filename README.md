@@ -81,6 +81,18 @@ To change the logging level of an existing instance, use the `setLevel` method:
 $logger->setLevel(\Teacup\Log::DEBUG);
 ```
 
+### Get current logging level
+
+To get the current logging level of an existing instance, use the `getLevel` method:
+
+```php
+$level = $logger->getLevel();
+
+$logger->setLevel(\Teacup\Log::INFO);
+$logger->logInfo('my info');
+$logger->setLevel($level);
+```
+
 ## Errors
 
 `Log::__construct()` throws a `RuntimeException` if the file handle couldn't be opened.

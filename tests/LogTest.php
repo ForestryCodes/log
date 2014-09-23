@@ -203,4 +203,12 @@ class Log extends PHPUnit_Framework_TestCase {
 		$this->assertStringEqualsFile('/tmp/test.log', '');
 	}
 
+	public function testGetLogLevel() {
+		$log = new Teacup\Log('/tmp', 'test.log');
+		$log->setLevel(Teacup\Log::NOTICE);
+		$level = $log->getLevel();
+
+		$this->assertEquals($level, 5);
+	}
+
 }
