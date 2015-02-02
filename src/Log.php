@@ -1,24 +1,26 @@
 <?php
 
+namespace Forestry\Log;
 
-namespace Teacup;
-
-
+/**
+ * Class Log
+ *
+ * @package Forestry\Log
+ */
 class Log {
-
 
 	/**
 	 * @var array
 	 */
 	private static $levels = array(
-			self::EMERGENCY => 'EMERGENCY',
-			self::ALERT => 'ALERT',
-			self::CRITICAL => 'CRITICAL',
-			self::ERROR => 'ERROR',
-			self::WARNING => 'WARNING',
-			self::NOTICE => 'NOTICE',
-			self::INFO => 'INFO',
-			self::DEBUG => 'DEBUG'
+		self::EMERGENCY => 'EMERGENCY',
+		self::ALERT => 'ALERT',
+		self::CRITICAL => 'CRITICAL',
+		self::ERROR => 'ERROR',
+		self::WARNING => 'WARNING',
+		self::NOTICE => 'NOTICE',
+		self::INFO => 'INFO',
+		self::DEBUG => 'DEBUG'
 	);
 
 	/**
@@ -46,7 +48,6 @@ class Log {
 	 */
 	private $logFormat = '%1$s %2$s %3$s';
 
-
 	/**
 	 * Log levels.
 	 */
@@ -58,7 +59,6 @@ class Log {
 	const NOTICE = 5;
 	const INFO = 6;
 	const DEBUG = 7;
-
 
 	/**
 	 * Constructor method.
@@ -109,10 +109,10 @@ class Log {
 
 		if((int)$level <= $this->level) {
 			$message = sprintf(
-					$this->logFormat . PHP_EOL,
-					date($this->dateFormat),
-					self::$levels[$level],
-					$this->interpolate((string)$message, $context)
+				$this->logFormat . PHP_EOL,
+				date($this->dateFormat),
+				self::$levels[$level],
+				$this->interpolate((string)$message, $context)
 			);
 
 			if(false === fwrite($this->handle, $message)) {
@@ -238,9 +238,9 @@ class Log {
 	 */
 	public function setLogFormat($format) {
 		$this->logFormat = str_replace(
-				array('{date}', '{level}', '{message}'),
-				array('%1$s', '%2$s', '%3$s'),
-				$format
+			array('{date}', '{level}', '{message}'),
+			array('%1$s', '%2$s', '%3$s'),
+			$format
 		);
 	}
 
