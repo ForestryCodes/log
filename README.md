@@ -1,6 +1,19 @@
-# Teacup Log Component [![Build Status](https://travis-ci.org/daniel-melzer/teacup-json.png?branch=master)](https://travis-ci.org/daniel-melzer/teacup-log)
+# Forestry Log
+
+[![Latest Version](https://img.shields.io/github/release/ForestryCodes/log.svg?style=flat-square)](https://github.com/ForestryCodes/log/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/ForestryCodes/log/master.svg?style=flat-square)](https://travis-ci.org/ForestryCodes/log)
+[![Total Downloads](https://img.shields.io/packagist/dt/forestry/log.svg?style=flat-square)](https://packagist.org/packages/forestry/log)
 
 Small log file writer with adjustable log level settings.
+
+## Install
+
+Via Composer
+
+``` bash
+$ composer require forestry/log
+```
 
 ## Usage
 
@@ -93,7 +106,21 @@ $logger->logInfo('my info');
 $logger->setLevel($level);
 ```
 
-## Errors
+## Testing
 
-`Log::__construct()` throws a `RuntimeException` if the file handle couldn't be opened.
-`Log::log()` throws an `OutOfBoundsException` if the given log level isn't defined.
+``` bash
+$ phpunit
+```
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+## Credits
+
+- [daniel-melzer](https://github.com/daniel-melzer)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
