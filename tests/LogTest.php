@@ -1,12 +1,21 @@
 <?php
+namespace Forestry\Log\Test;
 
+use Forestry\Log\Log;
 
-class Log extends PHPUnit_Framework_TestCase {
+class LogTest extends \PHPUnit_Framework_TestCase {
 
+	/**
+	 * @var string
+	 */
+	private $testFile = 'forestry-log-test.log';
 
+	/**
+	 * Clean posibliy previos generated test log file.
+	 */
 	public function setUp() {
-		if(file_exists('/tmp/test.log')) {
-			unlink('/tmp/test.log');
+		if(file_exists('/tmp/' . $this->testFile)) {
+			unlink('/tmp/' . $this->testFile);
 		}
 	}
 
@@ -14,14 +23,14 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @expectedException RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesNotExist() {
-		new Teacup\Log('/whargarble', 'test.log');
+		new Log('/whargarble', $this->testFile);
 	}
 
 	/**
 	 * @expectedException RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesntHaveWritePermissions() {
-		new Teacup\Log('/var', 'test.log');
+		new Log('/var', $this->testFile);
 	}
 
 	/**
@@ -29,29 +38,29 @@ class Log extends PHPUnit_Framework_TestCase {
 	 */
 	public function testThrowsExceptionWhenHandleCantBeOpened() {
 		//Suppressing errors only for testing purpose.
-		@new Teacup\Log('/tmp', '');
+		@new Log('/tmp', '');
 	}
 
 	public function testCreateInstance() {
-		$log = new Teacup\Log('/tmp', 'test.log');
-		$this->assertInstanceOf('\Teacup\Log', $log);
-		$this->assertFileExists('/tmp/test.log');
+		$log = new Log('/tmp', $this->testFile);
+		$this->assertInstanceOf('\Forestry\Log\Log', $log);
+		$this->assertFileExists('/tmp/' . $this->testFile);
 	}
 
 	/**
 	 * @expectedException OutOfBoundsException
 	 */
 	public function testThrowsExceptionOnUndefinedLogeLevel() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$log->log('What level is that?', 16);
 	}
 
 	public function testLogWithoutContext() {
-		$log = new Teacup\Log('/tmp', 'test.log');
-		$result = $log->log('A log message', Teacup\Log::DEBUG);
+		$log = new Log('/tmp', $this->testFile);
+		$result = $log->log('A log message', Log::DEBUG);
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} DEBUG A log message/', $content);
 	}
 
@@ -59,11 +68,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogWithoutContext
 	 */
 	public function testLogWithtContext() {
-		$log = new Teacup\Log('/tmp', 'test.log');
-		$result = $log->log('Hello {name}', Teacup\Log::DEBUG, array('name' => 'World'));
+		$log = new Log('/tmp', $this->testFile);
+		$result = $log->log('Hello {name}', Log::DEBUG, array('name' => 'World'));
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} DEBUG Hello World/', $content);
 	}
 
@@ -71,11 +80,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogWithoutContext
 	 */
 	public function testLogEmergency() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->emergency('This is an emergency');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} EMERGENCY This is an emergency/', $content);
 	}
@@ -84,11 +93,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogEmergency
 	 */
 	public function testLogAlert() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->alert('This is an alert');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} ALERT This is an alert/', $content);
 	}
@@ -97,11 +106,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogAlert
 	 */
 	public function testLogCritical() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->critical('This is a critical situation');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} CRITICAL This is a critical situation/',
 				$content
@@ -112,11 +121,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogCritical
 	 */
 	public function testLogError() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->error('This is an error');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} ERROR This is an error/', $content);
 	}
@@ -125,11 +134,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogError
 	 */
 	public function testLogWarning() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->warning('This is a warning');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} WARNING This is a warning/', $content);
 	}
@@ -138,11 +147,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogWarning
 	 */
 	public function testLogNotice() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->notice('This is just a notice');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} NOTICE This is just a notice/', $content);
 	}
@@ -151,11 +160,11 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogNotice
 	 */
 	public function testLogInfo() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->info('This is an information');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} INFO This is an information/', $content);
 	}
@@ -164,21 +173,21 @@ class Log extends PHPUnit_Framework_TestCase {
 	 * @depends testLogInfo
 	 */
 	public function testLogDebug() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$result = $log->debug('This is a debug message');
 		$this->assertTrue($result);
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} DEBUG This is a debug message/', $content);
 	}
 
 	public function testSetDateFormat() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$log->setDateFormat('c');
 		$log->debug('Setted another date format');
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 				'/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2} DEBUG Setted another date format/',
 				$content
@@ -186,26 +195,26 @@ class Log extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testSetLogFormat() {
-		$log = new Teacup\Log('/tmp', 'test.log');
+		$log = new Log('/tmp', $this->testFile);
 		$log->setLogFormat('[{date}|{level}] {message}');
 		$log->debug('Setted another log format');
 
-		$content = file_get_contents('/tmp/test.log');
+		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
 			 '/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\|DEBUG\] Setted another log format/', $content);
 	}
 
 	public function testSetLogLevel() {
-		$log = new Teacup\Log('/tmp', 'test.log');
-		$log->setLevel(Teacup\Log::INFO);
+		$log = new Log('/tmp', $this->testFile);
+		$log->setLevel(Log::INFO);
 		$log->debug('Setted another log format');
 
-		$this->assertStringEqualsFile('/tmp/test.log', '');
+		$this->assertStringEqualsFile('/tmp/' . $this->testFile, '');
 	}
 
 	public function testGetLogLevel() {
-		$log = new Teacup\Log('/tmp', 'test.log');
-		$log->setLevel(Teacup\Log::NOTICE);
+		$log = new Log('/tmp', $this->testFile);
+		$log->setLevel(Log::NOTICE);
 		$level = $log->getLevel();
 
 		$this->assertEquals($level, 5);

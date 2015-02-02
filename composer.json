@@ -1,9 +1,11 @@
 {
-    "name": "teacup/log",
-	"type": "library",
+    "name": "forestry/log",
     "description": "Small log file writer with adjustable log level settings.",
-    "keywords": ["log", "logging"],
-	"version": "0.2.0",
+    "keywords": [
+        "forestry",
+        "log"
+    ],
+    "homepage": "https://github.com/ForestryCodes/log",
     "license": "MIT",
     "authors": [
         {
@@ -13,15 +15,25 @@
             "role": "Developer"
         }
     ],
-	"support": {
-		"issues": "https://github.com/daniel-melzer/teacup-log/issues"
-	},
     "require": {
-        "php": ">=5.4.0"
+        "php" : ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*"
     },
     "autoload": {
         "psr-4": {
-			"Teacup\\": ""
-		}
+            "Forestry\\Log\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Forestry\\Log\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
