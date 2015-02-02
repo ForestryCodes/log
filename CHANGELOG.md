@@ -19,6 +19,10 @@ All Notable changes to `log` will be documented in this file.
 ### Security
 - Nothing
 
+## 0.2.0.1 - 2015-02-02
+
+No functionality added. Changes in the project structure and namespaces.
+
 ## 0.2.0 - 2014-09-23
 
 ### Removed
