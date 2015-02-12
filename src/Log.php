@@ -1,5 +1,4 @@
 <?php
-
 namespace Forestry\Log;
 
 /**
@@ -7,58 +6,58 @@ namespace Forestry\Log;
  *
  * @package Forestry\Log
  */
-class Log {
+class Log
+{
+    /**
+     * @var array
+     */
+    private static $levels = array(
+        self::EMERGENCY => 'EMERGENCY',
+        self::ALERT => 'ALERT',
+        self::CRITICAL => 'CRITICAL',
+        self::ERROR => 'ERROR',
+        self::WARNING => 'WARNING',
+        self::NOTICE => 'NOTICE',
+        self::INFO => 'INFO',
+        self::DEBUG => 'DEBUG'
+    );
 
-	/**
-	 * @var array
-	 */
-	private static $levels = array(
-		self::EMERGENCY => 'EMERGENCY',
-		self::ALERT => 'ALERT',
-		self::CRITICAL => 'CRITICAL',
-		self::ERROR => 'ERROR',
-		self::WARNING => 'WARNING',
-		self::NOTICE => 'NOTICE',
-		self::INFO => 'INFO',
-		self::DEBUG => 'DEBUG'
-	);
+    /**
+     * @var string
+     */
+    private $filePath;
 
-	/**
-	 * @var string
-	 */
-	private $filePath;
+    /**
+     * @var resource
+     */
+    private $handle;
 
-	/**
-	 * @var resource
-	 */
-	private $handle;
+    /**
+     * @var integer
+     */
+    private $level;
 
-	/**
-	 * @var integer
-	 */
-	private $level;
+    /**
+     * @var string
+     */
+    private $dateFormat = 'Y-m-d H:i:s';
 
-	/**
-	 * @var string
-	 */
-	private $dateFormat = 'Y-m-d H:i:s';
+    /**
+     * @var string
+     */
+    private $logFormat = '%1$s %2$s %3$s';
 
-	/**
-	 * @var string
-	 */
-	private $logFormat = '%1$s %2$s %3$s';
-
-	/**
-	 * Log levels.
-	 */
-	const EMERGENCY = 0;
-	const ALERT = 1;
-	const CRITICAL = 2;
-	const ERROR = 3;
-	const WARNING = 4;
-	const NOTICE = 5;
-	const INFO = 6;
-	const DEBUG = 7;
+    /**
+     * Log levels.
+     */
+    const EMERGENCY = 0;
+    const ALERT = 1;
+    const CRITICAL = 2;
+    const ERROR = 3;
+    const WARNING = 4;
+    const NOTICE = 5;
+    const INFO = 6;
+    const DEBUG = 7;
 
 	/**
 	 * Constructor method.
@@ -68,8 +67,9 @@ class Log {
 	 * @param integer $level
 	 * @throws \RuntimeException
 	 */
-	public function __construct($folder, $fileName, $level = self::DEBUG) {
-		if(!is_dir($folder) || !is_writable($folder)) {
+	public function __construct($folder, $fileName, $level = self::DEBUG)
+	{
+		if (!is_dir($folder) || !is_writable($folder)) {
 			throw new \RuntimeException('Folder does not exist, or is not writable');
 		}
 
@@ -77,7 +77,7 @@ class Log {
 		$this->filePath = $folder . DIRECTORY_SEPARATOR . $fileName;
 		$this->handle = fopen($this->filePath, 'a');
 
-		if(!$this->handle) {
+		if (!$this->handle) {
 			throw new \RuntimeException('Error opening log file with path: ' . $this->filePath);
 		}
 	}
@@ -85,8 +85,9 @@ class Log {
 	/**
 	 * Closes the handle.
 	 */
-	public function __destruct() {
-		if($this->handle) {
+	public function __destruct()
+	{
+		if ($this->handle) {
 			fclose($this->handle);
 		}
 	}
@@ -100,14 +101,15 @@ class Log {
 	 * @return boolean
 	 * @throws \OutOfBoundsException
 	 */
-	public function log($message, $level, array $context = array()) {
+	public function log($message, $level, array $context = array())
+	{
 		$return = true;
 
-		if(!isset(self::$levels[$level])) {
+		if (!isset(self::$levels[$level])) {
 			throw new \OutOfBoundsException('Log level invalid');
 		}
 
-		if((int)$level <= $this->level) {
+		if ((int)$level <= $this->level) {
 			$message = sprintf(
 				$this->logFormat . PHP_EOL,
 				date($this->dateFormat),
@@ -115,7 +117,7 @@ class Log {
 				$this->interpolate((string)$message, $context)
 			);
 
-			if(false === fwrite($this->handle, $message)) {
+			if (false === fwrite($this->handle, $message)) {
 				$return = false;
 			}
 		}
@@ -130,7 +132,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function emergency($message, array $context = array()) {
+	public function emergency($message, array $context = array())
+	{
 		return $this->log($message, self::EMERGENCY, $context);
 	}
 
@@ -141,7 +144,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function alert($message, array $context = array()) {
+	public function alert($message, array $context = array())
+	{
 		return $this->log($message, self::ALERT, $context);
 	}
 
@@ -152,7 +156,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function critical($message, array $context = array()) {
+	public function critical($message, array $context = array())
+	{
 		return $this->log($message, self::CRITICAL, $context);
 	}
 
@@ -163,7 +168,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function error($message, array $context = array()) {
+	public function error($message, array $context = array())
+	{
 		return $this->log($message, self::ERROR, $context);
 	}
 
@@ -174,7 +180,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function warning($message, array $context = array()) {
+	public function warning($message, array $context = array())
+	{
 		return $this->log($message, self::WARNING, $context);
 	}
 
@@ -185,7 +192,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function notice($message, array $context = array()) {
+	public function notice($message, array $context = array())
+	{
 		return $this->log($message, self::NOTICE, $context);
 	}
 
@@ -196,7 +204,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function info($message, array $context = array()) {
+	public function info($message, array $context = array())
+	{
 		return $this->log($message, self::INFO, $context);
 	}
 
@@ -207,7 +216,8 @@ class Log {
 	 * @param array $context
 	 * @return boolean
 	 */
-	public function debug($message, array $context = array()) {
+	public function debug($message, array $context = array())
+	{
 		return $this->log($message, self::DEBUG, $context);
 	}
 
@@ -219,7 +229,8 @@ class Log {
 	 * @param string $format
 	 * @return null
 	 */
-	public function setDateFormat($format) {
+	public function setDateFormat($format)
+	{
 		$this->dateFormat = $format;
 	}
 
@@ -236,7 +247,8 @@ class Log {
 	 *
 	 * @param $format
 	 */
-	public function setLogFormat($format) {
+	public function setLogFormat($format)
+	{
 		$this->logFormat = str_replace(
 			array('{date}', '{level}', '{message}'),
 			array('%1$s', '%2$s', '%3$s'),
@@ -251,16 +263,18 @@ class Log {
 	 *
 	 * @return void
 	 */
-	public function setLevel($level) {
+	public function setLevel($level)
+	{
 		$this->level = (int)$level;
 	}
 
 	/**
 	 * Gets the current level of the log instance
-	 *
+ 	 *
 	 * @return int
 	 */
-	public function getLevel() {
+	public function getLevel()
+	{
 		return (int)$this->level;
 	}
 
@@ -271,9 +285,10 @@ class Log {
 	 * @param array $context
 	 * @return string
 	 */
-	private function interpolate($message, array $context = array()) {
+	private function interpolate($message, array $context = array())
+	{
 		$replace = array();
-		foreach($context as $key => $value) {
+		foreach ($context as $key => $value) {
 			$replace['{' . $key . '}'] = $value;
 		}
 
