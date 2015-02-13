@@ -1,27 +1,17 @@
 <?php
 namespace Forestry\Log;
 
+use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
+use Psr\Log\InvalidArgumentException;
+
 /**
  * Class Log
  *
  * @package Forestry\Log
  */
-class Log
+class Log extends AbstractLogger
 {
-    /**
-     * @var array
-     */
-    private static $levels = array(
-        self::EMERGENCY => 'EMERGENCY',
-        self::ALERT => 'ALERT',
-        self::CRITICAL => 'CRITICAL',
-        self::ERROR => 'ERROR',
-        self::WARNING => 'WARNING',
-        self::NOTICE => 'NOTICE',
-        self::INFO => 'INFO',
-        self::DEBUG => 'DEBUG'
-    );
-
     /**
      * @var string
      */
@@ -33,11 +23,6 @@ class Log
     private $handle;
 
     /**
-     * @var integer
-     */
-    private $level;
-
-    /**
      * @var string
      */
     private $dateFormat = 'Y-m-d H:i:s';
@@ -47,33 +32,49 @@ class Log
      */
     private $logFormat = '%1$s %2$s %3$s';
 
-    /**
-     * Log levels.
-     */
-    const EMERGENCY = 0;
-    const ALERT = 1;
-    const CRITICAL = 2;
-    const ERROR = 3;
-    const WARNING = 4;
-    const NOTICE = 5;
-    const INFO = 6;
-    const DEBUG = 7;
+	/**
+	 * Severity values for each log level.
+	 *
+	 * @var array
+	 */
+	private $levelSeverity = [
+		LogLevel::EMERGENCY	=> 80,
+		LogLevel::ALERT		=> 70,
+		LogLevel::CRITICAL	=> 60,
+		LogLevel::ERROR		=> 50,
+		LogLevel::WARNING	=> 40,
+		LogLevel::NOTICE	=> 30,
+		LogLevel::INFO		=> 20,
+		LogLevel::DEBUG		=> 10
+	];
+
+	/**
+	 * Threshold value of the current Log instance.
+	 *
+	 * @var integer
+	 */
+	private $thresholdLevel;
 
 	/**
 	 * Constructor method.
 	 *
 	 * @param string $folder
 	 * @param string $fileName
-	 * @param integer $level
+	 * @param string $threshold
 	 * @throws \RuntimeException
+	 * @thorws InvalidArgumentException
 	 */
-	public function __construct($folder, $fileName, $level = self::DEBUG)
+	public function __construct($folder, $fileName, $threshold = LogLevel::DEBUG)
 	{
 		if (!is_dir($folder) || !is_writable($folder)) {
 			throw new \RuntimeException('Folder does not exist, or is not writable');
 		}
 
-		$this->level = (int)$level;
+		if (!isset($this->levelSeverity[$threshold])) {
+			throw new InvalidArgumentException('invalid log level ' . $threshold);
+		}
+
+		$this->thresholdLevel = $this->levelSeverity[$threshold];
 		$this->filePath = $folder . DIRECTORY_SEPARATOR . $fileName;
 		$this->handle = fopen($this->filePath, 'a');
 
@@ -95,25 +96,25 @@ class Log
 	/**
 	 * Writes a log message of a given level.
 	 *
+	 * @param string $level
 	 * @param string $message
-	 * @param integer $level
 	 * @param array $context
 	 * @return boolean
-	 * @throws \OutOfBoundsException
+	 * @throws InvalidArgumentException
 	 */
-	public function log($message, $level, array $context = array())
+	public function log($level, $message, array $context = array())
 	{
 		$return = true;
 
-		if (!isset(self::$levels[$level])) {
-			throw new \OutOfBoundsException('Log level invalid');
+		if (!isset($this->levelSeverity[$level])) {
+			throw new InvalidArgumentException('invalid log level ' . $level);
 		}
 
-		if ((int)$level <= $this->level) {
+		if ($this->thresholdLevel <= $this->levelSeverity[$level]) {
 			$message = sprintf(
 				$this->logFormat . PHP_EOL,
 				date($this->dateFormat),
-				self::$levels[$level],
+				strtoupper($level),
 				$this->interpolate((string)$message, $context)
 			);
 
