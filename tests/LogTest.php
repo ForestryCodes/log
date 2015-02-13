@@ -2,6 +2,8 @@
 namespace Forestry\Log\Test;
 
 use Forestry\Log\Log;
+use Psr\Log\LogLevel;
+use Psr\Log\InvalidArgumentException;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +23,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesNotExist()
 	{
@@ -29,7 +31,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesntHaveWritePermissions()
 	{
@@ -37,7 +39,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenHandleCantBeOpened()
 	{
@@ -53,19 +55,18 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException OutOfBoundsException
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testThrowsExceptionOnUndefinedLogeLevel()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->log('What level is that?', 16);
+		$log->log('foobar', 'What level is that?');
 	}
 
 	public function testLogWithoutContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log('A log message', Log::DEBUG);
-		$this->assertTrue($result);
+		$log->log(LogLevel::DEBUG, 'A log message');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -80,8 +81,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogWithContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log('Hello {name}', Log::DEBUG, array('name' => 'World'));
-		$this->assertTrue($result);
+		$log->log(LogLevel::DEBUG, 'Hello {name}', array('name' => 'World'));
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} DEBUG Hello World/', $content);
@@ -93,8 +93,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogEmergency()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->emergency('This is an emergency');
-		$this->assertTrue($result);
+		$log->emergency('This is an emergency');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -104,13 +103,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogEmergency
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogAlert()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->alert('This is an alert');
-		$this->assertTrue($result);
+		$log->alert('This is an alert');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -120,13 +118,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogAlert
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogCritical()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->critical('This is a critical situation');
-		$this->assertTrue($result);
+		$log->critical('This is a critical situation');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -136,13 +133,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogCritical
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogError()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->error('This is an error');
-		$this->assertTrue($result);
+		$log->error('This is an error');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -152,13 +148,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogError
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogWarning()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->warning('This is a warning');
-		$this->assertTrue($result);
+		$log->warning('This is a warning');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -168,13 +163,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogWarning
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogNotice()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->notice('This is just a notice');
-		$this->assertTrue($result);
+		$log->notice('This is just a notice');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -184,13 +178,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogNotice
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogInfo()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->info('This is an information');
-		$this->assertTrue($result);
+		$log->info('This is an information');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -200,13 +193,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogInfo
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogDebug()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->debug('This is a debug message');
-		$this->assertTrue($result);
+		$log->debug('This is a debug message');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -241,22 +233,22 @@ class LogTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
-	public function testSetLogLevel()
+	public function testSetLogThreshold()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->setLevel(Log::INFO);
-		$log->debug('Set log level to info');
+		$log->setLogThreshold(LogLevel::INFO);
+		$log->debug('Set log threshold to info');
 
 		$this->assertStringEqualsFile('/tmp/' . $this->testFile, '');
 	}
 
-	public function testGetLogLevel()
+	public function testGetLogThreshold()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->setLevel(Log::NOTICE);
-		$level = $log->getLevel();
+		$log->setLogThreshold(LogLevel::NOTICE);
+		$level = $log->getLogThreshold();
 
-		$this->assertEquals($level, 5);
+		$this->assertEquals($level, LogLevel::NOTICE);
 	}
 
 }
