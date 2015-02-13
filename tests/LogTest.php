@@ -66,8 +66,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogWithoutContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log(LogLevel::DEBUG, 'A log message');
-		$this->assertTrue($result);
+		$log->log(LogLevel::DEBUG, 'A log message');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -82,8 +81,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogWithContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log(LogLevel::DEBUG, 'Hello {name}', array('name' => 'World'));
-		$this->assertTrue($result);
+		$log->log(LogLevel::DEBUG, 'Hello {name}', array('name' => 'World'));
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} DEBUG Hello World/', $content);
@@ -95,8 +93,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogEmergency()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->emergency('This is an emergency');
-		$this->assertTrue($result);
+		$log->emergency('This is an emergency');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -111,8 +108,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogAlert()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->alert('This is an alert');
-		$this->assertTrue($result);
+		$log->alert('This is an alert');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -127,8 +123,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogCritical()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->critical('This is a critical situation');
-		$this->assertTrue($result);
+		$log->critical('This is a critical situation');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -143,8 +138,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogError()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->error('This is an error');
-		$this->assertTrue($result);
+		$log->error('This is an error');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -159,8 +153,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogWarning()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->warning('This is a warning');
-		$this->assertTrue($result);
+		$log->warning('This is a warning');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -175,8 +168,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogNotice()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->notice('This is just a notice');
-		$this->assertTrue($result);
+		$log->notice('This is just a notice');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -191,8 +183,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogInfo()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->info('This is an information');
-		$this->assertTrue($result);
+		$log->info('This is an information');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
@@ -207,8 +198,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogDebug()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->debug('This is a debug message');
-		$this->assertTrue($result);
+		$log->debug('This is a debug message');
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
 		$this->assertRegExp(
