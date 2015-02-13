@@ -1,10 +1,7 @@
 {
     "name": "forestry/log",
     "description": "Small log file writer with adjustable log level settings.",
-    "keywords": [
-        "forestry",
-        "log"
-    ],
+    "keywords": ["forestry", "log", "logging", "psr-3"],
     "homepage": "https://github.com/ForestryCodes/log",
     "license": "MIT",
     "authors": [
@@ -15,11 +12,12 @@
             "role": "Developer"
         }
     ],
-    "require": {
-        "php" : ">=5.4.0"
+    "support": {
+        "issues": "https://github.com/ForestryCodes/log/issues"
     },
-    "require-dev": {
-        "phpunit/phpunit" : "4.*"
+    "require": {
+        "php" : ">=5.4.0",
+        "psr/log": "~1.0"
     },
     "autoload": {
         "psr-4": {
@@ -30,6 +28,9 @@
         "psr-4": {
             "Forestry\\Log\\Test\\": "tests"
         }
+    },
+    "provide": {
+        "psr/log-implementation": "1.0.0"
     },
     "extra": {
         "branch-alias": {
