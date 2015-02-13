@@ -62,7 +62,7 @@ class Log extends AbstractLogger
 	 * @param string $fileName
 	 * @param string $threshold
 	 * @throws \RuntimeException
-	 * @thorws InvalidArgumentException
+	 * @throws InvalidArgumentException
 	 */
 	public function __construct($folder, $fileName, $threshold = LogLevel::DEBUG)
 	{
