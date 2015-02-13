@@ -2,22 +2,22 @@
 
 All Notable changes to `log` will be documented in this file.
 
-## NEXT - YYYY-MM-DD
+## 0.3.0 - 2015-02-13
+
+Implementation of PSR-3 introducing breaking changes.
 
 ### Added
-- Nothing
+- Psr\Log (PSR-3) implementation
+- setLogThreshold() and getLogThreshold() methods
 
-### Deprecated
-- Nothing
+### Changed
+- Reformat code according to the PSR-2 specs
 
 ### Fixed
-- Nothing
+- Fixed instructions and examples in README.md
 
 ### Removed
-- Nothing
-
-### Security
-- Nothing
+- Removed setLevel() and getLevel() methods
 
 ## 0.2.0.1 - 2015-02-02
 
