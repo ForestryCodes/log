@@ -2,6 +2,8 @@
 namespace Forestry\Log\Test;
 
 use Forestry\Log\Log;
+use Psr\Log\LogLevel;
+use Psr\Log\InvalidArgumentException;
 
 class LogTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +23,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesNotExist()
 	{
@@ -29,7 +31,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenFolderDoesntHaveWritePermissions()
 	{
@@ -37,7 +39,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException RuntimeException
+	 * @expectedException \RuntimeException
 	 */
 	public function testThrowsExceptionWhenHandleCantBeOpened()
 	{
@@ -53,18 +55,18 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @expectedException OutOfBoundsException
+	 * @expectedException InvalidArgumentException
 	 */
 	public function testThrowsExceptionOnUndefinedLogeLevel()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->log('What level is that?', 16);
+		$log->log('foobar', 'What level is that?');
 	}
 
 	public function testLogWithoutContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log('A log message', Log::DEBUG);
+		$result = $log->log(LogLevel::DEBUG, 'A log message');
 		$this->assertTrue($result);
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
@@ -80,7 +82,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	public function testLogWithContext()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$result = $log->log('Hello {name}', Log::DEBUG, array('name' => 'World'));
+		$result = $log->log(LogLevel::DEBUG, 'Hello {name}', array('name' => 'World'));
 		$this->assertTrue($result);
 
 		$content = file_get_contents('/tmp/' . $this->testFile);
@@ -104,7 +106,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogEmergency
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogAlert()
 	{
@@ -120,7 +122,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogAlert
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogCritical()
 	{
@@ -136,7 +138,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogCritical
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogError()
 	{
@@ -152,7 +154,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogError
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogWarning()
 	{
@@ -168,7 +170,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogWarning
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogNotice()
 	{
@@ -184,7 +186,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogNotice
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogInfo()
 	{
@@ -200,7 +202,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @depends testLogInfo
+	 * @depends testLogWithoutContext
 	 */
 	public function testLogDebug()
 	{
@@ -241,22 +243,22 @@ class LogTest extends \PHPUnit_Framework_TestCase
 		);
 	}
 
-	public function testSetLogLevel()
+	public function testSetLogThreshold()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->setLevel(Log::INFO);
-		$log->debug('Set log level to info');
+		$log->setLogThreshold(LogLevel::INFO);
+		$log->debug('Set log threshold to info');
 
 		$this->assertStringEqualsFile('/tmp/' . $this->testFile, '');
 	}
 
-	public function testGetLogLevel()
+	public function testGetLogThreshold()
 	{
 		$log = new Log('/tmp', $this->testFile);
-		$log->setLevel(Log::NOTICE);
-		$level = $log->getLevel();
+		$log->setLogThreshold(LogLevel::NOTICE);
+		$level = $log->getLogThreshold();
 
-		$this->assertEquals($level, 5);
+		$this->assertEquals($level, LogLevel::NOTICE);
 	}
 
 }
