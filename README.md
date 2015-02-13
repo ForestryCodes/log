@@ -3,9 +3,10 @@
 [![Latest Version](https://img.shields.io/github/release/ForestryCodes/log.svg?style=flat-square)](https://github.com/ForestryCodes/log/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/ForestryCodes/log/master.svg?style=flat-square)](https://travis-ci.org/ForestryCodes/log)
+[![Codacy Badge](https://www.codacy.com/project/badge/9be442da34e34e548af5312f844fc0fe)](https://www.codacy.com/public/danielgithub/log)
 [![Total Downloads](https://img.shields.io/packagist/dt/forestry/log.svg?style=flat-square)](https://packagist.org/packages/forestry/log)
 
-Small log file writer with adjustable log level settings.
+Small log file writer with adjustable log level threshold settings.
 
 ## Install
 
@@ -20,15 +21,14 @@ $ composer require forestry/log
 ### Creating a logger
 
 ```php
-$logger = new \Teacup\Log::create('/tmp', 'dummy.log');
-
+$logger = new Forestry\Log\Log('/tmp', 'dummy.log');
 //Just log notices and above.
-$errorLog = new \Teacup\Log::create('./logs', 'error.log', \Teacup\Log::NOTICE);
+$errorLog = new Forestry\Log\Log('./logs', 'error.log', Psr\Log\LogLevel::NOTICE);
 ```
 
 ### Log a message
 
-\Teacup\Log provides methods for the log levels defined by RFC 5424 (debug, info, notice, warning, error, critical, alert and emergency). There's a method for each of these levels:
+Forestry\Log provides methods for the log levels defined by RFC 5424 (debug, info, notice, warning, error, critical, alert and emergency). There's a method for each of these levels:
 
 ```php
 $logger->emergency('This is an alert message');
@@ -44,7 +44,7 @@ $logger->debug('This is a debug message');
 You can also use a generic `log` method:
 
 ```php
-$logger->log('this is a debug message', \Teacup\Log::DEBUG);
+$logger->log(Psr\Log\LogLevel::DEBUG, 'this is a debug message');
 ```
 
 #### Using placeholders in log messages
@@ -86,24 +86,23 @@ These placeholders will be replaced with ones for `sprintf()`, so you can also u
 * `%2$s` = level
 * `%3$s` = message
 
-### Change the logging level of an existing instance
+### Change the threshold level of an existing instance
 
-To change the logging level of an existing instance, use the `setLevel` method:
+To change the threshold level of an existing instance, use the `setLogThreshold` method:
 
 ```php
-$logger->setLevel(\Teacup\Log::DEBUG);
+$logger->setLogThreshold(Psr\Log\LogLevel::DEBUG);
 ```
 
 ### Get current logging level
 
-To get the current logging level of an existing instance, use the `getLevel` method:
+To get the current threshold level of an existing instance, use the `getLogThreshold` method:
 
 ```php
-$level = $logger->getLevel();
-
-$logger->setLevel(\Teacup\Log::INFO);
+$level = $logger->getLogThreshold();
+$logger->setLogThreshold(Psr\Log\LogLevel::INFO);
 $logger->logInfo('my info');
-$logger->setLevel($level);
+$logger->setLogThreshold($level);
 ```
 
 ## Testing
