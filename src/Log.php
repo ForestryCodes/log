@@ -99,13 +99,11 @@ class Log extends AbstractLogger
 	 * @param string $level
 	 * @param string $message
 	 * @param array $context
-	 * @return boolean
+	 * @return void
 	 * @throws InvalidArgumentException
 	 */
 	public function log($level, $message, array $context = array())
 	{
-		$return = true;
-
 		if (!isset($this->levelSeverity[$level])) {
 			throw new InvalidArgumentException('invalid log level ' . $level);
 		}
@@ -118,12 +116,8 @@ class Log extends AbstractLogger
 				$this->interpolate((string)$message, $context)
 			);
 
-			if (false === fwrite($this->handle, $message)) {
-				$return = false;
-			}
+			fwrite($this->handle, $message);
 		}
-
-		return $return;
 	}
 
 	/**
@@ -162,25 +156,29 @@ class Log extends AbstractLogger
 	}
 
 	/**
-	 * Sets the level of the log instance
+	 * Sets the threshold level of the log instance.
 	 *
 	 * @param integer $level the new level to set
-	 *
 	 * @return void
+	 * @throws InvalidArgumentException
 	 */
-	public function setLevel($level)
+	public function setLogThreshold($level)
 	{
-		$this->level = (int)$level;
+		if (!isset($this->levelSeverity[$level])) {
+			throw new InvalidArgumentException('invalid log level ' . $level);
+		}
+
+		$this->thresholdLevel = $this->levelSeverity[$level];
 	}
 
 	/**
-	 * Gets the current level of the log instance
+	 * Gets the current threshold level of the log instance.
  	 *
-	 * @return int
+	 * @return string
 	 */
-	public function getLevel()
+	public function getLogThreshold()
 	{
-		return (int)$this->level;
+		return array_search($this->thresholdLevel, $this->levelSeverity);
 	}
 
 	/**
