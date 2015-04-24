@@ -149,8 +149,8 @@ class Log extends AbstractLogger
     public function setLogFormat($format)
     {
         $this->logFormat = str_replace(
-            array('{date}', '{level}', '{message}'),
-            array('%1$s', '%2$s', '%3$s'),
+            ['{date}', '{level}', '{message}'],
+            ['%1$s', '%2$s', '%3$s'],
             $format
         );
     }
@@ -190,7 +190,7 @@ class Log extends AbstractLogger
      */
     private function interpolate($message, array $context = array())
     {
-        $replace = array();
+        $replace = [];
         foreach ($context as $key => $value) {
             $replace['{' . $key . '}'] = $value;
         }
