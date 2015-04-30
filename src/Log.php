@@ -3,7 +3,6 @@ namespace Forestry\Log;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
-use Psr\Log\InvalidArgumentException;
 
 /**
  * Class Log
@@ -60,14 +59,14 @@ class Log extends AbstractLogger
      *
      * @param string $fileName
      * @param string $threshold
-     * @throws \RuntimeException
-     * @throws InvalidArgumentException
+     * @throws DirectoryException
+     * @throws FileException
      */
     public function __construct($fileName, $threshold = LogLevel::DEBUG)
     {
         $folder = dirname($fileName);
         if (!is_dir($folder) || !is_writable($folder)) {
-            throw new \RuntimeException('Folder does not exist, or is not writable');
+            throw new DirectoryException('Folder does not exist, or is not writable');
         }
 
         $this->setLogThreshold($threshold);
@@ -75,7 +74,7 @@ class Log extends AbstractLogger
         $this->handle = fopen($this->filePath, 'a');
 
         if (!$this->handle) {
-            throw new \RuntimeException('Error opening log file with path: ' . $this->filePath);
+            throw new FileException('Error opening log file with path: ' . $this->filePath);
         }
     }
 
