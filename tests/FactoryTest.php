@@ -3,6 +3,13 @@
 namespace Forestry\Log\Test;
 
 use Forestry\Log\DebugLogger;
+use Forestry\Log\InfoLogger;
+use Forestry\Log\NoticeLogger;
+use Forestry\Log\WarningLogger;
+use Forestry\Log\ErrorLogger;
+use Forestry\Log\CriticalLogger;
+use Forestry\Log\AlertLogger;
+use Forestry\Log\EmergencyLogger;
 use Psr\Log\LogLevel;
 
 /**
