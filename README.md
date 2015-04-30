@@ -21,9 +21,20 @@ $ composer require forestry/log
 ### Creating a logger
 
 ```php
-$logger = new Forestry\Log\Log('/tmp', 'dummy.log');
+$logger = new Forestry\Log\Log('/tmp/dummy.log');
 //Just log notices and above.
-$errorLog = new Forestry\Log\Log('./logs', 'error.log', Psr\Log\LogLevel::NOTICE);
+$errorLog = new Forestry\Log\Log('./logs/error.log', Psr\Log\LogLevel::NOTICE);
+```
+
+#### Using a factory
+
+Another way to create an instance is the use of one of the factories. There is one for each threshold level.
+
+Here is an example for a logger with an error threshold:
+
+```php
+$factory = new ErrorLogger();
+$logger = $factory->create('/tmp/error.log');
 ```
 
 ### Log a message
@@ -31,7 +42,7 @@ $errorLog = new Forestry\Log\Log('./logs', 'error.log', Psr\Log\LogLevel::NOTICE
 Forestry\Log provides methods for the log levels defined by RFC 5424 (debug, info, notice, warning, error, critical, alert and emergency). There's a method for each of these levels:
 
 ```php
-$logger->emergency('This is an alert message');
+$logger->emergency('This is an emergency message');
 $logger->alert('This is an alert message');
 $logger->critical('This is an critical message');
 $logger->error('This is an error message');

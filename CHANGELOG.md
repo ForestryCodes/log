@@ -6,6 +6,7 @@ All Notable changes to `log` will be documented in this file.
 
 ## Added
 - Added DirectoryException, FileException and own InvalidArgumentException.
+- Added factories for each log level.
 
 ## Changed
 - Changed parameter of the constructor. File path and name are not seperated anymore.  
