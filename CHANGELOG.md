@@ -4,6 +4,9 @@ All Notable changes to `log` will be documented in this file.
 
 ## Unreleased
 
+## Added
+- Added DirectoryException, FileException and own InvalidArgumentException.
+
 ## Changed
 - Changed parameter of the constructor. File path and name are not seperated anymore.  
 

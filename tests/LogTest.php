@@ -22,45 +22,11 @@ class LogTest extends \PHPUnit_Framework_TestCase
 		}
 	}
 
-	/**
-	 * @expectedException \RuntimeException
-	 */
-	public function testThrowsExceptionWhenFolderDoesNotExist()
-	{
-		new Log('/whargarble/' . $this->testFile);
-	}
-
-	/**
-	 * @expectedException \RuntimeException
-	 */
-	public function testThrowsExceptionWhenFolderDoesntHaveWritePermissions()
-	{
-		new Log('/var/' . $this->testFile);
-	}
-
-	/**
-	 * @expectedException \RuntimeException
-	 */
-	public function testThrowsExceptionWhenHandleCantBeOpened()
-	{
-		//Suppressing errors only for testing purpose.
-		@new Log('/tmp');
-	}
-
 	public function testCreateInstance()
 	{
 		$log = new Log('/tmp/' . $this->testFile);
 		$this->assertInstanceOf('\Forestry\Log\Log', $log);
 		$this->assertFileExists('/tmp/' . $this->testFile);
-	}
-
-	/**
-	 * @expectedException InvalidArgumentException
-	 */
-	public function testThrowsExceptionOnUndefinedLogeLevel()
-	{
-		$log = new Log('/tmp/' . $this->testFile, 100);
-		$log->log('foobar', 'What level is that?');
 	}
 
 	public function testLogWithoutContext()
