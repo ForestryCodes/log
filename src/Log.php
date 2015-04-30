@@ -58,24 +58,20 @@ class Log extends AbstractLogger
     /**
      * Constructor method.
      *
-     * @param string $folder
      * @param string $fileName
      * @param string $threshold
      * @throws \RuntimeException
      * @throws InvalidArgumentException
      */
-    public function __construct($folder, $fileName, $threshold = LogLevel::DEBUG)
+    public function __construct($fileName, $threshold = LogLevel::DEBUG)
     {
+        $folder = dirname($fileName);
         if (!is_dir($folder) || !is_writable($folder)) {
             throw new \RuntimeException('Folder does not exist, or is not writable');
         }
 
-        if (!isset($this->levelSeverity[$threshold])) {
-            throw new InvalidArgumentException('invalid log level ' . $threshold);
-        }
-
-        $this->thresholdLevel = $this->levelSeverity[$threshold];
-        $this->filePath = $folder . DIRECTORY_SEPARATOR . $fileName;
+        $this->setLogThreshold($threshold);
+        $this->filePath = $fileName;
         $this->handle = fopen($this->filePath, 'a');
 
         if (!$this->handle) {

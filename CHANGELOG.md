@@ -2,6 +2,11 @@
 
 All Notable changes to `log` will be documented in this file.
 
+## Unreleased
+
+## Changed
+- Changed parameter of the constructor. File path and name are not seperated anymore.  
+
 ## 0.3.0 - 2015-02-13
 
 Implementation of PSR-3 introducing breaking changes.
