@@ -23,11 +23,6 @@ use Psr\Log\LogLevel;
 class Log extends AbstractLogger
 {
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
      * Handle for all file operations.
      *
      * @var resource
@@ -87,11 +82,10 @@ class Log extends AbstractLogger
         }
 
         $this->setLogThreshold($threshold);
-        $this->filePath = $fileName;
-        $this->handle = fopen($this->filePath, 'a');
+        $this->handle = fopen($fileName, 'a');
 
         if (!$this->handle) {
-            throw new FileException('Error opening log file with path: ' . $this->filePath);
+            throw new FileException('Error opening log file with path: ' . $fileName);
         }
     }
 
