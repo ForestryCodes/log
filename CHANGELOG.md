@@ -2,14 +2,14 @@
 
 All Notable changes to `log` will be documented in this file.
 
-## Unreleased
+## 1.0.0 - 2015-05-02
 
-## Added
+### Added
 - Added DirectoryException, FileException and own InvalidArgumentException.
 - Added factories for each log level.
 
-## Changed
-- Changed parameter of the constructor. File path and name are not seperated anymore.  
+### Changed
+- Changed parameter of the constructor. File path and name are not separated anymore.
 
 ## 0.3.0 - 2015-02-13
 
