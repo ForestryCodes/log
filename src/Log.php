@@ -1,13 +1,24 @@
 <?php
+/**
+ * This file is part of the Forestry Log library
+ *
+ * @license http://opensource.org/licenses/MIT
+ * @link https://github.com/ForestryCodes/log/
+ * @package Forestry Log
+ *
+ * For the full copyright and license information, please view the LICENSE file
+ * that was distributed with this source code.
+ */
+
 namespace Forestry\Log;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
 /**
- * Class Log
+ * Class to write log files
  *
- * @package Forestry\Log
+ * @package Forestry Log
  */
 class Log extends AbstractLogger
 {
@@ -17,16 +28,22 @@ class Log extends AbstractLogger
     private $filePath;
 
     /**
+     * Handle for all file operations.
+     *
      * @var resource
      */
     private $handle;
 
     /**
+     * Format of the date information.
+     *
      * @var string
      */
     private $dateFormat = 'Y-m-d H:i:s';
 
     /**
+     * Line format of a log entry.
+     *
      * @var string
      */
     private $logFormat = '%1$s %2$s %3$s';
@@ -94,7 +111,7 @@ class Log extends AbstractLogger
      * @param string $level
      * @param string $message
      * @param array $context
-     * @return void
+     * @return null
      * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
@@ -140,6 +157,7 @@ class Log extends AbstractLogger
      * $format = '[{level}|{date}] {message}'; //[INFO|2013-04-25 13:37:42] This is an information message
      *
      * @param $format
+     * @return null
      */
     public function setLogFormat($format)
     {
@@ -154,7 +172,7 @@ class Log extends AbstractLogger
      * Sets the threshold level of the log instance.
      *
      * @param integer $level the new level to set
-     * @return void
+     * @return null
      * @throws InvalidArgumentException
      */
     public function setLogThreshold($level)
